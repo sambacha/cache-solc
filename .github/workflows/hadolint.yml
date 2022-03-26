@@ -1,0 +1,31 @@
+name: hadolint
+
+on:
+  pull_request:
+    branches:
+    - master
+    - feature/**
+    - fix/**
+    - main
+    paths:
+    - '**/Dockerfile*'
+    - '.github/workflows/hadolint.yml'
+
+jobs:
+  goss:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: goss
+      uses: e1himself/goss-installation-action@v1.0.3
+    - name: hadolint
+      uses: docker://hadolint/hadolint:latest
+      id: goss
+      with:
+        args: 'hadolint --format tty Dockerfile'
+
+    - uses: hadolint/hadolint-action@v1.6.0
+      id: hadolint
+      with:
+        dockerfile: Dockerfile
