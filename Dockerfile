@@ -1,13 +1,15 @@
 # syntax = docker/dockerfile-upstream:master-experimental
-FROM alpine:3.14 AS builder
+FROM alpine:3.16 AS builder
 
 WORKDIR /usr/src/solc/
 RUN mkdir -p .compiler_cache
+RUN mkdir -p ~/.compiler_cache
+
 COPY --chmod=0744 fetch /fetch
 
 ENV SOLC_COMPILER_CACHE=/.compiler_cache
 
-FROM alpine:3.14
+FROM alpine:3.16
 
 #RUN useradd -r -u 1001 -g root solc_user
 RUN useradd -ms /bin/bash solc_user
@@ -21,7 +23,6 @@ RUN chmod a+rx /usr/local/bin/*
 USER solc_user
 WORKDIR /opt/solc
 
-# RUN apk add --no-cache bash jq curl ca-certificates 
 RUN apk add --no-cache jq curl ca-certificates 
 
 ENV PATH=/opt/solc/.solc-select:${PATH}
